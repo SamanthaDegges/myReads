@@ -25,16 +25,13 @@ class ListBooks extends React.Component {
   render(){
     const { books } = this.props
 
-    this.state.shelves.map(function(each, num, arr){
+    this.state.shelves.map((each, num, arr) => {
       const match = new RegExp(each.shelf)
-
-      books.filter(function(book){
-        if (book.shelf !== "none" && match.test(book.shelf)){
-          // console.log(each.shelf,' Match! ',book)
-          return each.books.push(book)}
-        })
-        return
+      each.books = books.filter((book) => {
+        return book.shelf !== "none" && match.test(book.shelf)
       })
+      return false
+    })
 
       return (
 
