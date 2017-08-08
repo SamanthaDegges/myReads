@@ -5,12 +5,12 @@ class ListBooks extends React.Component {
   state = {
     shelves: [
       {
-        shelf: "curr",//"Currently Reading",
+        shelf: "curr",
         books: [],
         title: "Currently Reading"
       },
       {
-        shelf: "want",//"Want To Read",
+        shelf: "want",
         books: [],
         title: "Want To Read"
       },
@@ -72,7 +72,8 @@ class ListBooks extends React.Component {
                   </div>
             ))}
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <a onClick={this.props.onNavigate}
+              >Add a book</a>
             </div>
           </div>
         </div>

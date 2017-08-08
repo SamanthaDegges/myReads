@@ -1,9 +1,7 @@
 import React from 'react'
-import * as BooksAPI from './BooksAPI'
 import escapeRegExp from 'escape-string-regexp';
 
 class SearchBook extends React.Component {
-  //proptypes
 
   state = {
     query: ""
@@ -18,8 +16,9 @@ class SearchBook extends React.Component {
   }
 
   render() {
-    const { books, onSearchBook } = this.props
-    const { query} = this.state
+    const { books} = this.props
+    const { query } = this.state
+    console.log(books);
 
     let showingBooks
     if (query) {
@@ -35,9 +34,8 @@ class SearchBook extends React.Component {
       <div className="search-books">
         <div className="search-books-bar">
           <a className="close-search"
-
-            onClick={() => this.setState({ showSearchPage: false })}
-
+            href = "#main"
+            onClick={this.props.onNavigate}
           >Close</a>
           <div className="search-books-input-wrapper">
             <input

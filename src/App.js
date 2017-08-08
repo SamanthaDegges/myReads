@@ -20,10 +20,10 @@ class BooksApp extends React.Component {
   }
 
 
-componentDidMount(){
+componentWillMount(){
   BooksAPI.getAll().then((books) => {
     this.setState({ books })
-    console.log(this.state.books)
+    console.log("from ComponentDidMount ",this.state.books)
   })
 }
 
@@ -46,16 +46,21 @@ searchBook = (query, max) => {
 
 
   render() {
-    //move html to components. Declare methods on props.
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <SearchBook
-          onSearchBook={this.searchBook}
           books={this.state.books}
+          onNavigate={()=>{
+            this.setState({showSearchPage:false})
+          }}
           />
         ) : (
-          <ListBooks />
+          <ListBooks
+          onNavigate={()=>{
+            this.setState({showSearchPage:true})
+          }}
+          books={this.state.books}/>
         )}
       </div>
     )
