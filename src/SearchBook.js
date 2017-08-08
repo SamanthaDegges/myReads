@@ -34,7 +34,7 @@ class SearchBook extends React.Component {
       <div className="search-books">
         <div className="search-books-bar">
           <a className="close-search"
-            href = "#main"
+            href="#main"
             onClick={this.props.onNavigate}
           >Close</a>
           <div className="search-books-input-wrapper">
@@ -42,7 +42,7 @@ class SearchBook extends React.Component {
             type="text"
             placeholder="Search by title or author"
             value={query}
-            onChange={(event) => this.updateQuery(event.target.value)}
+            onChange={(event)=> this.updateQuery(event.target.value)}
             />
           </div>
         </div>
@@ -63,7 +63,8 @@ class SearchBook extends React.Component {
               <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                 <div className="book-shelf-changer">
-                  <select>
+                  <select
+                  onChange={(event)=>this.props.onChangeShelf({book},event.target.value)}>
                     <option value="none" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>

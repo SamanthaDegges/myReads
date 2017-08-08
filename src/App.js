@@ -23,7 +23,7 @@ class BooksApp extends React.Component {
 componentWillMount(){
   BooksAPI.getAll().then((books) => {
     this.setState({ books })
-    console.log("from ComponentDidMount ",this.state.books)
+    console.log("from Mount ",this.state.books)
   })
 }
 
@@ -35,7 +35,9 @@ removeBook = (book) => {
 }
 
 shelfChanger = (book, shelf) => {
-  BooksAPI.update(book, shelf);
+  console.log('from shelfChanger, ',book,shelf);
+  try {BooksAPI.update(book, shelf)}catch(e){console.log("---ERROR: ",e)}
+  return book
 }
 
 searchBook = (query, max) => {
@@ -44,19 +46,20 @@ searchBook = (query, max) => {
   })
 }
 
-
   render() {
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <SearchBook
           books={this.state.books}
+          onChangeShelf={this.shelfChanger}
           onNavigate={()=>{
             this.setState({showSearchPage:false})
           }}
           />
         ) : (
           <ListBooks
+          onChangeShelf={this.shelfChanger}
           onNavigate={()=>{
             this.setState({showSearchPage:true})
           }}
