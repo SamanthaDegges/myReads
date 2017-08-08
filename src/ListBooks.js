@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 class ListBooks extends React.Component {
 
@@ -33,9 +34,8 @@ class ListBooks extends React.Component {
       return false
     })
 
-//none means remove from db?
-//select.on change, value of option is grabbed and passed into shelfChanger on props.
-//Then trigger new loading of books via ComponentDidMount, or remove book from page and then get just that book again.
+//{this.props.books.filter((book) =>
+//book.title === each.shelf &&
       return (
 
         <div className="list-books">
@@ -49,7 +49,9 @@ class ListBooks extends React.Component {
                   <h2 className="bookshelf-title">{each.title}</h2>
                 <div className="bookshelf-books">
                   <ol className="books-grid">
-                    {each.books.map((book) => (
+
+  {each.books.map((book)=> (
+
                     <li key={book.id}>
                       <div className="book">
                         <div className="book-top">
@@ -68,15 +70,15 @@ class ListBooks extends React.Component {
                         <div className="book-authors">{book.authors[0]}</div>
                       </div>
                     </li>
-                      ))}
+                  ))}
                     </ol>
                   </div>
                 </div>
               ))}
             <div className="open-search">
-              <a onClick={this.props.onNavigate}
-              href="#search"
-              >Add a book</a>
+              <Link
+              to="/search"
+              >Add a book</Link>
             </div>
           </div>
         </div>

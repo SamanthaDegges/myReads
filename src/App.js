@@ -3,19 +3,14 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import SearchBook from './SearchBook.js'
 import ListBooks from './ListBooks.js'
+import { Route } from 'react-router-dom'
 
 class BooksApp extends React.Component {
   /**
    * TODO:add prop type checking
 */
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: true,
+    showSearchPage: false,
     books: []
   }
 
@@ -27,16 +22,10 @@ componentWillMount(){
   })
 }
 
-removeBook = (book) => {
-  this.setState((state) => ({
-    books: state.books.filter((b) => b.id !== book.id)
-  }))
-  BooksAPI.remove(book)
-}
-
 shelfChanger = (book, shelf) => {
   console.log('from shelfChanger, ',book,shelf);
-  try {BooksAPI.update(book, shelf)}catch(e){console.log("---ERROR: ",e)}
+  BooksAPI.update(book, shelf)
+  this.componentWillMount()
   return book
 }
 
@@ -49,22 +38,20 @@ searchBook = (query, max) => {
   render() {
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <SearchBook
-          books={this.state.books}
-          onChangeShelf={this.shelfChanger}
-          onNavigate={()=>{
-            this.setState({showSearchPage:false})
-          }}
-          />
-        ) : (
-          <ListBooks
-          onChangeShelf={this.shelfChanger}
-          onNavigate={()=>{
-            this.setState({showSearchPage:true})
-          }}
-          books={this.state.books}/>
-        )}
+      <Route path="/search" render={()=>(
+        <SearchBook
+        books={this.state.books}
+        onChangeShelf={this.shelfChanger}
+        />
+      )}
+      />
+      <Route exact path="/" render={()=>(
+        <ListBooks
+        onChangeShelf={this.shelfChanger}
+        books={this.state.books}
+        />
+      )}
+      />
       </div>
     )
   }
