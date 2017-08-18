@@ -4,13 +4,14 @@ import './App.css'
 import SearchBook from './SearchBook.js'
 import ListBooks from './ListBooks.js'
 import { Route } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
+
 
 class BooksApp extends React.Component {
   /**
    * TODO:add prop type checking
 */
   state = {
-    showSearchPage: false,
     books: []
   }
 
@@ -23,10 +24,14 @@ componentWillMount(){
 }
 
 shelfChanger = (book, shelf) => {
-  console.log('from shelfChanger, ',book,shelf);
-  BooksAPI.update(book, shelf)
-  this.componentWillMount()
-  return book
+  console.log('Passed into shelfChanger, ',book.title,shelf);
+  BooksAPI.update(book, shelf).then(updated => {
+    this.setState(state => ({
+      books: updated
+    }))
+      console.log("updated book from state are: ", updated);
+      console.log('should be the same: ', this.state.books);
+  })
 }
 
 searchBook = (query, max) => {
@@ -37,22 +42,28 @@ searchBook = (query, max) => {
 
   render() {
     return (
-      <div className="app">
-      <Route path="/search" render={()=>(
-        <SearchBook
-        books={this.state.books}
-        onChangeShelf={this.shelfChanger}
-        />
-      )}
-      />
-      <Route exact path="/" render={()=>(
-        <ListBooks
-        onChangeShelf={this.shelfChanger}
-        books={this.state.books}
-        />
-      )}
-      />
-      </div>
+      <BrowserRouter>
+        <div className="app">
+          <Route path="/search" render={(history)=>(
+            <SearchBook
+            books={this.state.books}
+            onChangeShelf={(book, shelf) => {
+              this.shelfChanger(book,shelf)
+            }}
+            />
+          )}
+          />
+          <Route exact path="/" render={({history})=>(
+            <ListBooks
+            books={this.state.books}
+            onChangeShelf={(book, shelf)=> {
+              this.shelfChanger(book, shelf)
+              }}
+            />
+          )}
+          />
+        </div>
+      </BrowserRouter>
     )
   }
 }
