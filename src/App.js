@@ -11,32 +11,24 @@ class BooksApp extends React.Component {
    * TODO:add prop type checking
 */
   state = {
-    books: [],
-    currBooks: [],
-    readBooks: [],
-    wantBooks: []
+    books: []
   }
 
   componentDidMount(){
     BooksAPI.getAll().then((books) => {
       this.setState(state => ({
-        books: books,
-        currBooks: books.filter((book)=>book.shelf === "currentlyReading"),
-        readBooks: books.filter((book)=>book.shelf === "read"),
-        wantBooks: books.filter((book)=>book.shelf === "wantToRead")
+        books: books
       }))
     })
   }
 
-  shelfChanger = (book, shelf) => {
-    BooksAPI.update(book, shelf).then(updated => {
+  shelfChanger = (book, nShelf) => {
+    book.shelf = nShelf
+    BooksAPI.update(book, nShelf).then(
       this.setState(state => ({
-        books: updated.currentlyReading.concat(updated.wantToRead.concat(updated.readBooks)),
-        currBooks: updated.currentlyReading,
-        wantBooks: updated.wantToRead,
-        readBooks: updated.read
+        books: state.books.filter(each => each.id !== book.id).concat(book)
       }))
-    })
+    )
   }
 
   searchBook = (query, max) => {
@@ -54,9 +46,6 @@ class BooksApp extends React.Component {
           <Route path="/search" render={({history})=>(
             <SearchBook
             books={this.state.books}
-            currBooks={this.state.currBooks}
-            wantBooks={this.state.wantBooks}
-            readBooks={this.state.readBooks}
             onChangeShelf={(book, shelf) => {
               this.shelfChanger(book,shelf)
             }}
@@ -66,9 +55,6 @@ class BooksApp extends React.Component {
           <Route exact path="/" render={({history})=>(
             <ListBooks
             books={this.state.books}
-            currBooks={this.state.currBooks}
-            wantBooks={this.state.wantBooks}
-            readBooks={this.state.readBooks}
             onChangeShelf={(book, shelf)=> {
               this.shelfChanger(book, shelf)
             }}
