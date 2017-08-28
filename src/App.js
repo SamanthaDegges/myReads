@@ -31,7 +31,7 @@ class BooksApp extends React.Component {
   shelfChanger = (book, shelf) => {
     BooksAPI.update(book, shelf).then(updated => {
       this.setState(state => ({
-        books: updated,
+        books: updated.currentlyReading.concat(updated.wantToRead.concat(updated.readBooks)),
         currBooks: updated.currentlyReading,
         wantBooks: updated.wantToRead,
         readBooks: updated.read
