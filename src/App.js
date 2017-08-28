@@ -6,47 +6,57 @@ import ListBooks from './ListBooks.js'
 import { Route } from 'react-router-dom'
 import { BrowserRouter } from 'react-router-dom'
 
-
 class BooksApp extends React.Component {
   /**
    * TODO:add prop type checking
 */
   state = {
-    books: []
+    books: [],
+    currBooks: [],
+    readBooks: [],
+    wantBooks: []
   }
 
+  componentDidMount(){
+    BooksAPI.getAll().then((books) => {
+      this.setState(state => ({
+        books: books,
+        currBooks: books.filter((book)=>book.shelf === "currentlyReading"),
+        readBooks: books.filter((book)=>book.shelf === "read"),
+        wantBooks: books.filter((book)=>book.shelf === "wantToRead")
+      }))
+    })
+  }
 
-componentWillMount(){
-  BooksAPI.getAll().then((books) => {
-    this.setState({ books })
-    console.log("from Mount ",this.state.books)
-  })
-}
+  shelfChanger = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(updated => {
+      this.setState(state => ({
+        books: updated,
+        currBooks: updated.currentlyReading,
+        wantBooks: updated.wantToRead,
+        readBooks: updated.read
+      }))
+    })
+  }
 
-shelfChanger = (book, shelf) => {
-  console.log('Passed into shelfChanger, ',book.title,shelf);
-  BooksAPI.update(book, shelf).then(updated => {
-    this.setState(state => ({
-      books: updated
-    }))
-      console.log("updated book from state are: ", updated);
-      console.log('should be the same: ', this.state.books);
-  })
-}
-
-searchBook = (query, max) => {
-  BooksAPI.search(query, max).then((results) => {
-    console.log(results, this.results);
-  })
-}
+  searchBook = (query, max) => {
+    BooksAPI.search(query, max).then((results) => {
+      this.setState({
+        showingBooks: results
+      })
+    })
+  }
 
   render() {
     return (
       <BrowserRouter>
         <div className="app">
-          <Route path="/search" render={(history)=>(
+          <Route path="/search" render={({history})=>(
             <SearchBook
             books={this.state.books}
+            currBooks={this.state.currBooks}
+            wantBooks={this.state.wantBooks}
+            readBooks={this.state.readBooks}
             onChangeShelf={(book, shelf) => {
               this.shelfChanger(book,shelf)
             }}
@@ -56,9 +66,12 @@ searchBook = (query, max) => {
           <Route exact path="/" render={({history})=>(
             <ListBooks
             books={this.state.books}
+            currBooks={this.state.currBooks}
+            wantBooks={this.state.wantBooks}
+            readBooks={this.state.readBooks}
             onChangeShelf={(book, shelf)=> {
               this.shelfChanger(book, shelf)
-              }}
+            }}
             />
           )}
           />

@@ -17,17 +17,16 @@ class SearchBook extends React.Component {
   }
 
   render() {
-    const { books} = this.props
+    const { onChangeShelf, books } = this.props
     const { query } = this.state
-    console.log(books);
 
     let showingBooks
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
-      showingBooks = this.props.books.filter((book)=> match.test(book.authors[0])|match.test(book.title))
+      showingBooks = books.filter((book)=> match.test(book.authors[0])|match.test(book.title))
     }
     else {
-      showingBooks = books;
+      showingBooks = books
         }
 
     return (
@@ -47,23 +46,21 @@ class SearchBook extends React.Component {
         </div>
 
         {showingBooks.length !== books.length && (
-                  <div className='search-books-results'>
-                    <span>Now showing {showingBooks.length} of {showingBooks.length} total</span>
-                    <button onClick={this.clearQuery}>Show all</button>
-                  </div>
-                 )}
+          <div className='search-books-results'>
+            <span>Now showing {showingBooks.length} of {showingBooks.length} total</span>
+            <button onClick={this.clearQuery}>Show all</button>
+          </div>
+        )}
 
         <div className="search-books-results">
           <ol className="books-grid">
           {showingBooks.map((book) => (
           <li key={book.id}>
-
             <div className="book">
               <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                 <div className="book-shelf-changer">
-                  <select
-                  onChange={(event)=>this.props.onChangeShelf({book},event.target.value)}>
+                  <select onChange={(event)=>onChangeShelf(book,event.target.value)}>
                     <option value="none" disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
@@ -78,9 +75,9 @@ class SearchBook extends React.Component {
           </li>
         ))}
 
-          </ol>
-        </div>
+        </ol>
       </div>
+    </div>
     )
   }
 }
