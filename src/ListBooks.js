@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 class ListBooks extends React.Component {
 
   render(){
-    const { onChangeShelf, currBooks, readBooks, wantBooks } = this.props
+    const { onChangeShelf, books } = this.props
 
     return (
       <div className="list-books">
@@ -17,13 +17,13 @@ class ListBooks extends React.Component {
               <h2 className="bookshelf-title">Currently Reading</h2>
             <div className="bookshelf-books">
               <ol className="books-grid">
-              {currBooks.map((book)=>(
+              {books.filter((book)=>book.shelf === "currentlyReading").map((book)=>(
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                     <div className="book-shelf-changer">
-                      <select onChange={(event)=>onChangeShelf(book,event.target.value)}>
+                      <select value={book.shelf} onChange={(event)=>onChangeShelf(book,event.target.value)}>
                         <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>
@@ -44,13 +44,13 @@ class ListBooks extends React.Component {
             <h2 className="bookshelf-title">Read</h2>
             <div className="bookshelf-books">
               <ol className="books-grid">
-              {readBooks.map((book)=>(
+              {books.filter((book)=>book.shelf === "read").map((book)=>(
                 <li key={book.id}>
                   <div className="book">
                     <div className="book-top">
                       <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                       <div className="book-shelf-changer">
-                        <select onChange={(event)=>onChangeShelf(book,event.target.value)}>
+                        <select value={book.shelf} onChange={(event)=>onChangeShelf(book,event.target.value)}>
                           <option value="none" disabled>Move to...</option>
                           <option value="currentlyReading">Currently Reading</option>
                           <option value="wantToRead">Want to Read</option>
@@ -71,13 +71,13 @@ class ListBooks extends React.Component {
             <h2 className="bookshelf-title">Want to Read</h2>
             <div className="bookshelf-books">
               <ol className="books-grid">
-              {wantBooks.map((book)=>(
+              {books.filter((book)=>book.shelf === "wantToRead").map((book)=>(
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
                     <div className="book-shelf-changer">
-                      <select onChange={(event)=>onChangeShelf(book,event.target.value)}>
+                      <select value={book.shelf} onChange={(event)=>onChangeShelf(book,event.target.value)}>
                         <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>
