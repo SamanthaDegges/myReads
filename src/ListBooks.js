@@ -33,7 +33,7 @@ class ListBooks extends React.Component {
                     </div>
                   </div>
                   <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors[0]}</div>
+                  <div className="book-authors">{book.authors ? book.authors[0] : "no author listed"}</div>
                 </div>
               </li>
               ))}
@@ -60,7 +60,7 @@ class ListBooks extends React.Component {
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors[0]}</div>
+                    <div className="book-authors">{book.authors ? book.authors[0] : "no author listed"}</div>
                   </div>
                 </li>
               ))}
@@ -87,7 +87,7 @@ class ListBooks extends React.Component {
                     </div>
                   </div>
                   <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors[0]}</div>
+                  <div className="book-authors">{book.authors ? book.authors[0] : "no author listed"}</div>
                 </div>
               </li>
               ))}

@@ -13,21 +13,22 @@ class SearchBook extends React.Component {
   }
 
   clearQuery = () => {
+    console.log('------cleared query');
     this.setState({query: ""})
   }
 
   render() {
-    const { onChangeShelf, books } = this.props
+    const { onChangeShelf, books, showingBooks, onSearchBook } = this.props
     const { query } = this.state
 
-    let showingBooks
+    let searchedBooks
     if (query) {
       const match = new RegExp(escapeRegExp(query), 'i')
-      showingBooks = books.filter((book)=> match.test(book.authors[0])|match.test(book.title))
+      onSearchBook(query,8)
+      if (showingBooks) { searchedBooks = showingBooks}
     }
-    else {
-      showingBooks = books
-        }
+    else { searchedBooks = books}
+
 
     return (
       <div className="search-books">
@@ -45,16 +46,16 @@ class SearchBook extends React.Component {
           </div>
         </div>
 
-        {showingBooks.length !== books.length && (
+        {searchedBooks.length !== books.length && (
           <div className='search-books-results'>
-            <span>Now showing {showingBooks.length} of {showingBooks.length} total</span>
+            <span>Now showing {searchedBooks.length} of {searchedBooks.length} total</span>
             <button onClick={this.clearQuery}>Show all</button>
           </div>
         )}
 
         <div className="search-books-results">
           <ol className="books-grid">
-          {showingBooks.map((book) => (
+          {searchedBooks.map((book) => (
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
@@ -70,7 +71,7 @@ class SearchBook extends React.Component {
                 </div>
               </div>
               <div className="book-title">{book.title}</div>
-              <div className="book-authors">{book.authors[0]}</div>
+              <div className="book-authors">{book.authors ? book.authors[0] : "no author listed"}</div>
             </div>
           </li>
         ))}

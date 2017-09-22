@@ -11,7 +11,8 @@ class BooksApp extends React.Component {
    * TODO:add prop type checking
 */
   state = {
-    books: []
+    books: [],
+    showingBooks: []
   }
 
   componentDidMount(){
@@ -33,9 +34,11 @@ class BooksApp extends React.Component {
 
   searchBook = (query, max) => {
     BooksAPI.search(query, max).then((results) => {
+      console.log('fired with ', query,' and max, ', max,' . results are: ',results);
       this.setState({
         showingBooks: results
       })
+      console.log('confirming. showingBooks from APp are: ', this.state.showingBooks);
     })
   }
 
@@ -45,7 +48,11 @@ class BooksApp extends React.Component {
         <div className="app">
           <Route path="/search" render={({history})=>(
             <SearchBook
+            onSearchBook={(query, max) => {
+              this.searchBook(query,max)
+            }}
             books={this.state.books}
+            showingBooks={this.state.showingBooks}
             onChangeShelf={(book, shelf) => {
               this.shelfChanger(book,shelf)
             }}
