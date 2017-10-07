@@ -1,5 +1,4 @@
 import React from 'react'
-import escapeRegExp from 'escape-string-regexp'
 import { Link } from 'react-router-dom'
 
 class SearchBook extends React.Component {
@@ -8,27 +7,16 @@ class SearchBook extends React.Component {
     query: ""
   }
 
-  updateQuery = (query) => {
+  updateSearchedBooks = (query) => {
     this.setState({ query: query.trim()})
-  }
-
-  clearQuery = () => {
-    console.log('------cleared query');
-    this.setState({query: ""})
+    query && this.props.onSearchBook(query, 20)
   }
 
   render() {
-    const { onChangeShelf, books, showingBooks, onSearchBook } = this.props
+    const { onChangeShelf, showingBooks } = this.props
     const { query } = this.state
 
-    let searchedBooks
-    if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      onSearchBook(query,8)
-      if (showingBooks) { searchedBooks = showingBooks}
-    }
-    else { searchedBooks = books}
-
+    let searchedBooks = showingBooks
 
     return (
       <div className="search-books">
@@ -41,25 +29,19 @@ class SearchBook extends React.Component {
             type="text"
             placeholder="Search by title or author"
             value={query}
-            onChange={(event)=> this.updateQuery(event.target.value)}
+            onChange={(event)=> this.updateSearchedBooks(event.target.value)}
             />
           </div>
         </div>
 
-        {searchedBooks.length !== books.length && (
-          <div className='search-books-results'>
-            <span>Now showing {searchedBooks.length} of {searchedBooks.length} total</span>
-            <button onClick={this.clearQuery}>Show all</button>
-          </div>
-        )}
-
         <div className="search-books-results">
           <ol className="books-grid">
+
           {searchedBooks.map((book) => (
           <li key={book.id}>
             <div className="book">
               <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks?book.imageLinks.thumbnail:'http://via.placeholder.com/128x193?text=No%20Cover'})`}}></div>
                 <div className="book-shelf-changer">
                   <select value={book.shelf} onChange={(event)=>onChangeShelf(book,event.target.value)}>
                     <option value="none" disabled>Move to...</option>
