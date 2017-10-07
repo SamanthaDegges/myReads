@@ -34,13 +34,12 @@ class BooksApp extends React.Component {
 
   searchBook = (query, max) => {
     BooksAPI.search(query, max).then((results) => {
-      console.log('fired with ', query,' and max, ', max,' . results are: ',results);
-      this.setState({
-        showingBooks: results
-      })
-      console.log('confirming. showingBooks from APp are: ', this.state.showingBooks);
-    })
-  }
+      if(!results.error) {
+        this.setState({
+         showingBooks: results
+        })
+      }
+    })}
 
   render() {
     return (
@@ -51,11 +50,11 @@ class BooksApp extends React.Component {
             onSearchBook={(query, max) => {
               this.searchBook(query,max)
             }}
-            books={this.state.books}
             showingBooks={this.state.showingBooks}
             onChangeShelf={(book, shelf) => {
               this.shelfChanger(book,shelf)
             }}
+
             />
           )}
           />
