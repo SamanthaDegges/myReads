@@ -34,7 +34,7 @@ class BooksApp extends React.Component {
 
   searchBook = (query, max) => {
     BooksAPI.search(query, max).then((results) => {
-      if(!results.error) {
+      if(results && !results.error) {
         this.setState({
          showingBooks: results
         })
@@ -47,6 +47,7 @@ class BooksApp extends React.Component {
         <div className="app">
           <Route path="/search" render={({history})=>(
             <SearchBook
+            books={this.state.books}
             onSearchBook={(query, max) => {
               this.searchBook(query,max)
             }}
