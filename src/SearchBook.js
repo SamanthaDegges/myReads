@@ -12,11 +12,23 @@ class SearchBook extends React.Component {
     query && this.props.onSearchBook(query, 20)
   }
 
-  render() {
-    const { onChangeShelf, showingBooks } = this.props
-    const { query } = this.state
 
-    let searchedBooks = showingBooks
+
+  render() {
+    const { onChangeShelf, books, showingBooks } = this.props
+    const { query, shelf } = this.state
+
+    let searchedBooks = showingBooks.map((searchBook) => {
+      if(searchBook !== null || 'undefined'){
+          this.props.books.map((ownedBook) => {
+            if (searchBook.id === ownedBook.id) {
+                searchBook.shelf = ownedBook.shelf
+            }
+              return searchBook
+          })
+          return searchBook
+        }
+      })
 
     return (
       <div className="search-books">
@@ -43,8 +55,8 @@ class SearchBook extends React.Component {
               <div className="book-top">
                 <div className="book-cover" style={{ width: 128, height: 200, backgroundImage: `url(${book.imageLinks?book.imageLinks.thumbnail:'http://via.placeholder.com/128x193?text=No%20Cover'})`}}></div>
                 <div className="book-shelf-changer">
-                  <select value={book.shelf ? book.shelf: "none"} onChange={(event)=>onChangeShelf(book,event.target.value)}>
-                    <option value="none" disabled>Move to...</option>
+                <select value={book.shelf?book.shelf:"none"} onChange={(event)=>onChangeShelf(book,event.target.value)}>
+                    <option disabled>Move to...</option>
                     <option value="currentlyReading">Currently Reading</option>
                     <option value="wantToRead">Want to Read</option>
                     <option value="read">Read</option>
