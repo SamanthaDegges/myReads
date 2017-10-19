@@ -12,15 +12,13 @@ class SearchBook extends React.Component {
     query && this.props.onSearchBook(query, 20)
   }
 
-
-
   render() {
     const { onChangeShelf, books, showingBooks } = this.props
-    const { query, shelf } = this.state
+    const { query } = this.state
 
     let searchedBooks = showingBooks.map((searchBook) => {
       if(searchBook !== null || 'undefined'){
-          this.props.books.map((ownedBook) => {
+          books.map((ownedBook) => {
             if (searchBook.id === ownedBook.id) {
                 searchBook.shelf = ownedBook.shelf
             }
@@ -28,6 +26,7 @@ class SearchBook extends React.Component {
           })
           return searchBook
         }
+        return searchBook
       })
 
     return (
